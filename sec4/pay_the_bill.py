@@ -2,7 +2,9 @@ import random
 
 friends = ["Soham", "Joy da", "Amitav", "Payel", "Amitav er bou"]
 
-random_number = random.randint(0, 4)
+print(len(friends))                                         #   <--- This will output the whole length
+
+random_number = random.randint(0, len(friends) - 1)         #   <--- The minus one is needed. (Length == Index - 1)
 
 print(f"Bill will be paid by {friends[random_number]}")
 
