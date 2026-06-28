@@ -51,7 +51,6 @@ pics_hang = ['''
       |
 =========''']
 
-# Generating Random Word & Similar Length Blank
 def generate_randoms():
     random_word = random.choice(words)
     random_blanks = "_"
@@ -65,8 +64,6 @@ dashes = randoms[1]
 user_lives = len(secret_word)
 pic_value = (6 - len(secret_word))
 print(f"Here is the secret word: {secret_word}")
-# print(f"Here are the dashes: {dashes}, {type(dashes)}, {len(dashes)}")
-# print(f"User Lives Original: {user_lives}")
 
 def user_live_decrease():
     global user_lives
@@ -75,12 +72,10 @@ def user_live_decrease():
     pic_value += 1
     print(f"WRONG GUESS | User Lives Remains: {user_lives}")
 
-while dashes.count("_") > 0 and user_lives != 0:
-    # Asking the user to guess a letter
-    def user_guess():
-        global dashes
-        global pic_value
-        user_reply = str(input(f"""                                              
+def user_guess_input():
+    global dashes
+    global pic_value
+    user_reply = str(input(f"""                                              
     | |                                             
     | |__   __ _ _ __   __ _ _ __ ___   __ _ _ __   
     | '_ \ / _' | '_ \ / _' | '_ ' _ \ / _' | '_ \  
@@ -92,26 +87,22 @@ while dashes.count("_") > 0 and user_lives != 0:
     
     Word to guess: {dashes}
     Guess a letter: """))        
-        return user_reply
+    return user_reply
 
-
-    # Checking if the user input matches a letter inside the random word and updating the dashes
-    user_guess = user_guess()
-
+while dashes.count("_") > 0 and user_lives != 0:
+    user_guess = user_guess_input()
     if user_guess in secret_word:
         all_indexes = [idx for idx, val in enumerate(secret_word) if val == user_guess]
-        # print(f"Index / Indexes of the matched character: {all_indexes}")
-        if user_guess not in dashes:                                                                #   <--- this will not work if there are 3 or more similar chars inside the secret word (e.g. banana)
+        if user_guess not in dashes:                                                                #   <--- Bug 1 | this will not work if there are 3 or more similar chars inside the secret word (e.g. banana)
             print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
             updated_dashes = dashes[:all_indexes[0]] + user_guess + dashes[all_indexes[0] + 1 :]
         else:
-            if len(all_indexes) > 1:                                                                #   <--- this will not work when 2 chars are in the secret word (e.g. deer)
+            if len(all_indexes) > 1:                                                                #   <--- Bug 2 | this will not work when 2 chars are in the secret word (e.g. deer)
                 print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
                 updated_dashes = dashes[:all_indexes[1]] + user_guess + dashes[all_indexes[1] + 1 :]
             else:
                 user_live_decrease()
         dashes = updated_dashes
-        # print(f"Updated dashes with user input: {dashes}")
     else:
         user_live_decrease()
 else:
