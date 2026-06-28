@@ -110,3 +110,25 @@ else:
         print(f"Game OVER. User Lives: {user_lives}")
     else:
         print(f"*** WOW. YOU WON ***")
+
+
+# Bug Fix Code
+"""
+while dashes.count("_") > 0 and user_lives != 0:
+    user_guess = user_guess_input()
+    if user_guess in secret_word:
+        all_indexes = [idx for idx, val in enumerate(secret_word) if val == user_guess]
+        updated = list(dashes)
+        changed = False
+        for idx in all_indexes:
+            if updated[idx] == "_":
+                updated[idx] = user_guess
+                changed = True
+        if changed:
+            print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
+            dashes = "".join(updated)
+        else:
+            user_live_decrease()
+    else:
+        user_live_decrease()
+"""
