@@ -1,6 +1,55 @@
 import random
 words = ['ant', 'bat', 'camel', 'cat', 'crow', 'deer', 'dog', 'eagle', 'ferret', 'goose', 'hawk', 'llama', 'moose', 'mouse', 'otter', 'owl', 'parrot', 'rabbit', 'raven', 'seal', 'sloth', 'tiger', 'turtle', 'wolf', 'zebra']
-user_lives = 0
+pics_hang = ['''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========''']
 
 # Generating Random Word & Similar Length Blank
 def generate_randoms():
@@ -13,23 +62,36 @@ def generate_randoms():
 randoms = generate_randoms()
 secret_word = randoms[0]
 dashes = randoms[1]
+user_lives = len(secret_word)
+pic_value = (6 - len(secret_word))
 print(f"Here is the secret word: {secret_word}")
-print(f"Here are the dashes: {dashes}, {type(dashes)}, {len(dashes)}")
+# print(f"Here are the dashes: {dashes}, {type(dashes)}, {len(dashes)}")
+# print(f"User Lives Original: {user_lives}")
 
-while dashes.count("_") > 0:
+def user_live_decrease():
+    global user_lives
+    global pic_value
+    user_lives -= 1
+    pic_value += 1
+    print(f"WRONG GUESS | User Lives Remains: {user_lives}")
+
+while dashes.count("_") > 0 and user_lives != 0:
     # Asking the user to guess a letter
     def user_guess():
         global dashes
+        global pic_value
         user_reply = str(input(f"""                                              
-    | |                                            
-    | |__   __ _ _ __   __ _ _ __ ___   __ _ _ __  
-    | '_ \ / _' | '_ \ / _' | '_ ' _ \ / _' | '_ \ 
-    | | | | (_| | | | | (_| | | | | | | (_| | | | |
-    |_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|
+    | |                                             
+    | |__   __ _ _ __   __ _ _ __ ___   __ _ _ __   
+    | '_ \ / _' | '_ \ / _' | '_ ' _ \ / _' | '_ \  
+    | | | | (_| | | | | (_| | | | | | | (_| | | | | 
+    |_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_| 
                         __/ |                      
                        |___/
+    {pics_hang[pic_value]}
+    
     Word to guess: {dashes}
-    Guess a letter: """))
+    Guess a letter: """))        
         return user_reply
 
 
@@ -37,14 +99,23 @@ while dashes.count("_") > 0:
     user_guess = user_guess()
 
     if user_guess in secret_word:
-        print("It's available")
         all_indexes = [idx for idx, val in enumerate(secret_word) if val == user_guess]
-        print(f"Index / Indexes of the matched character: {all_indexes}")
-        if user_guess not in dashes:                                                                #   <--- this will not work if there are 3 or more similar chars inside the secret word
+        # print(f"Index / Indexes of the matched character: {all_indexes}")
+        if user_guess not in dashes:                                                                #   <--- this will not work if there are 3 or more similar chars inside the secret word (e.g. banana)
+            print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
             updated_dashes = dashes[:all_indexes[0]] + user_guess + dashes[all_indexes[0] + 1 :]
         else:
-            updated_dashes = dashes[:all_indexes[1]] + user_guess + dashes[all_indexes[1] + 1 :]
+            if len(all_indexes) > 1:                                                                #   <--- this will not work when 2 chars are in the secret word (e.g. deer)
+                print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
+                updated_dashes = dashes[:all_indexes[1]] + user_guess + dashes[all_indexes[1] + 1 :]
+            else:
+                user_live_decrease()
         dashes = updated_dashes
-        print(f"Updated dashes with user input: {dashes}")
+        # print(f"Updated dashes with user input: {dashes}")
     else:
-        print("NO MATCH FOUND")
+        user_live_decrease()
+else:
+    if user_lives == 0:
+        print(f"Game OVER. User Lives: {user_lives}")
+    else:
+        print(f"*** WOW. YOU WON ***")
