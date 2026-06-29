@@ -89,15 +89,17 @@ def user_guess_input():
     Guess a letter: """))        
     return user_reply
 
+
+#* The main loop
 while dashes.count("_") > 0 and user_lives != 0:
     user_guess = user_guess_input()
     if user_guess in secret_word:
         all_indexes = [idx for idx, val in enumerate(secret_word) if val == user_guess]
-        if user_guess not in dashes:                                                                #   <--- Bug 1 | this will not work if there are 3 or more similar chars inside the secret word (e.g. banana)
+        if user_guess not in dashes:                                                                #!   <--- Bug 1 | this will not work if there are 3 or more similar chars inside the secret word (e.g. banana)
             print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
             updated_dashes = dashes[:all_indexes[0]] + user_guess + dashes[all_indexes[0] + 1 :]
         else:
-            if len(all_indexes) > 1:                                                                #   <--- Bug 2 | this will not work when 2 chars are in the secret word (e.g. deer)
+            if len(all_indexes) > 1:                                                                #!   <--- Bug 2 | this will not work when 2 chars are in the secret word (e.g. deer)
                 print(f"CORRECT GUESS | User Lives Remains: {user_lives}")
                 updated_dashes = dashes[:all_indexes[1]] + user_guess + dashes[all_indexes[1] + 1 :]
             else:
@@ -112,7 +114,7 @@ else:
         print(f"*** WOW. YOU WON ***")
 
 
-# Bug Fix Code
+#TODO Bug Fix Code
 """
 while dashes.count("_") > 0 and user_lives != 0:
     user_guess = user_guess_input()
@@ -132,3 +134,9 @@ while dashes.count("_") > 0 and user_lives != 0:
     else:
         user_live_decrease()
 """
+
+#! This is an alert comment
+#? This is a query comment
+#* This is a highlighted comment
+#// Thsi is a deleted comment
+#TODO This is a to-do comment
