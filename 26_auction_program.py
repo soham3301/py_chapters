@@ -24,6 +24,7 @@ def result_display(highest_bidders_name, highest_bid):
 def program_stopper():
     user_consent = str(input("Are there any ohter bidders? Y / N\n")).lower()
     if user_consent == "y":
+        print("\n" * 20)
         return True
     else:
         return False
